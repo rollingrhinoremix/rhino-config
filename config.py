@@ -4,11 +4,24 @@ import os
 # Change configuration to enable the mainline kernel
 def mainlineInstall():
     os.system("touch ~/.rhino/config/mainline")
-    print("Configuration updated!")
+    print("Configuration updated! The mainline kernel will be installed on the next update")
 
 # Do not enable the mainline kernel
 def mainlineDenied():
-    print("No changes were made to the Rhino Configuration")
+    print("No changes were made to the Rhino configuration, The mainline kernel will not be installed.")
+
+def snapdPurge():
+    os.system("touch ~/.rhino/config/snapdpurge")
+    os.system("sudo rm -rf /var/cache/snapd/")
+    os.system("sudo apt autoremove --purge snapd gnome-software-plugin-snap")
+    os.system("rm -fr ~/snap")
+    os.system("sudo apt-mark hold snapd")
+    os.system("sudo apt install flatpak gnome-software-plugin-flatpak")
+    os.system("flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo")
+    print("Configuration updated, snapd has been removed from the system.")
+
+def snapdKeep():
+    print("No changes were made to the Rhino configuration, snapd has not been purged")
 
 def config():
     # Splash screen
@@ -25,6 +38,12 @@ def config():
     # If user input is no, go to the mainline denied function
     elif mainline == "n" or mainline == "N":
         mainlineDenied()
+    print("---")
+    snapd = input("Do you wish to remove Snapcraft (snapd) and replace it with Flatpaks? [Y/n]")
+    if snapd == "Y" or snapd == "y" or snapd == "":
+        snapdPurge()
+    elif snapd == "n" or snapd == "N":
+        snapdKeep()
     
     # Print that the program has completed and then exit
     print("\nrhino-config has completed, please run rhino-update to update your system!")

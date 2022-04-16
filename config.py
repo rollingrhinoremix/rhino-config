@@ -10,19 +10,22 @@ def mainlineInstall():
 def mainlineDenied():
     print("No changes were made to the Rhino configuration, The mainline kernel will not be installed.")
 
+# Purge snapd from system and mark it as hold on apt so it will not be reinstalled
 def snapdPurge():
     os.system("touch ~/.rhino/config/snapdpurge")
     os.system("sudo rm -rf /var/cache/snapd/")
-    os.system("sudo apt autoremove --purge snapd gnome-software-plugin-snap")
+    os.system("sudo apt autoremove --purge snapd gnome-software-plugin-snap -y")
     os.system("rm -fr ~/snap")
     os.system("sudo apt-mark hold snapd")
-    os.system("sudo apt install flatpak gnome-software-plugin-flatpak")
+    os.system("sudo apt install flatpak gnome-software-plugin-flatpak -y")
     os.system("flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo")
     print("Configuration updated, snapd has been removed from the system.")
 
+# Do not purge snapd from system
 def snapdKeep():
     print("No changes were made to the Rhino configuration, snapd has not been purged")
 
+# Main program
 def config():
     # Splash screen
     print("\nWelcome to the Rhino configuration script")
@@ -49,5 +52,5 @@ def config():
     print("\nrhino-config has completed, please run rhino-update to update your system!")
     quit()
 
-# Call the script
+# Call the main program
 config()

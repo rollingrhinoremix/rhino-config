@@ -1,7 +1,7 @@
-import sys
 from pathlib import Path
 from shutil import rmtree
 from subprocess import run
+import sys
 from textwrap import dedent
 from typing import NoReturn
 
@@ -60,7 +60,7 @@ def main() -> NoReturn:
     if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpaks?"):
         (config_path / "snapdpurge").touch(exist_ok=True)
 
-        run(["sudo", "rm", "-rf" "/var/cache/snapd/"])
+        run(["sudo", "rm", "-rf", "/var/cache/snapd/"])
         run(["sudo", "apt", "autopurge", "snapd", "gnome-software-plugin-snap", "-y"])
 
         rmtree(Path("~/snap").expanduser(), ignore_errors=True)

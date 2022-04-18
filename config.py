@@ -1,9 +1,14 @@
 # Imports
 import os
+from pathlib import Path
+from shutil import rmtree
+
+config_path = Path("~/.rhino/config/").expanduser()
+config_path.mkdir(parents=True, exist_ok=True)
 
 # Change configuration to enable the mainline kernel
 def mainlineInstall():
-    os.system("touch ~/.rhino/config/mainline")
+    (config_path / "mainline").touch(exist_ok=True)
     print(
         "Configuration updated! The mainline kernel will be installed on the next update"
     )
@@ -18,10 +23,10 @@ def mainlineDenied():
 
 # Purge snapd from system and mark it as hold on apt so it will not be reinstalled
 def snapdPurge():
-    os.system("touch ~/.rhino/config/snapdpurge")
+    (config_path / "snapdpurge").touch(exist_ok=True)
     os.system("sudo rm -rf /var/cache/snapd/")
     os.system("sudo apt autoremove --purge snapd gnome-software-plugin-snap -y")
-    os.system("rm -fr ~/snap")
+    rmtree(Path("~/snap").expanduser(), ignore_errors=True)
     os.system("sudo apt-mark hold snapd")
     os.system("sudo apt install flatpak gnome-software-plugin-flatpak -y")
     os.system(

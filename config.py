@@ -2,6 +2,7 @@
 import os
 from pathlib import Path
 from shutil import rmtree
+from textwrap import dedent
 
 config_path = Path("~/.rhino/config/").expanduser()
 config_path.mkdir(parents=True, exist_ok=True)
@@ -9,15 +10,17 @@ config_path.mkdir(parents=True, exist_ok=True)
 
 def main():
     # Splash screen
-    print("\nWelcome to the Rhino configuration script")
-    print("---")
     print(
-        "The Rhino Configuration script allows for you to customise the rhino-update utility and extend its capabilities, such as allowing for the installation of unsupported software."
+        dedent(
+            """
+            Welcome to the Rhino configuration script
+            ---
+            The Rhino Configuration script allows for you to customise the rhino-update utility and extend its capabilities, such as allowing for the installation of unsupported software.
+            Please be cautious when using rhino-config, issues can arise from some of the settings so please ensure that you know what you are doing and have read the documentation.
+            ---
+            """
+        )
     )
-    print(
-        "Please be cautious when using rhino-config, issues can arise from some of the settings so please ensure that you know what you are doing and have read the documentation."
-    )
-    print("---")
 
     # Give the user the choice of installing the latest mainline kernel and take user input
     mainline = input("Do you wish to install the latest Linux mainline kernel? [Y/n] ")

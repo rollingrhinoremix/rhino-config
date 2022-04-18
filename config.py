@@ -18,7 +18,7 @@ def ask(message: str, default_yes: bool = True) -> bool:
     :return: Whether the user answered yes.
     """
 
-    reply = input(f"{message} {'[Y/n]' if default_yes else '[y/N]'}").strip().upper()
+    reply = input(f"{message} {'[Y/n]' if default_yes else '[y/N]'} ").strip().upper()
 
     if reply in ["Y", ""]:
         return True

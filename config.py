@@ -50,7 +50,7 @@ def main() -> NoReturn:
     if ask("Do you wish to install the latest Linux mainline kernel?"):
         (config_path / "mainline").touch(exist_ok=True)
         print(
-            "Configuration updated! The mainline kernel will be installed on the next update"
+            "Configuration updated! The mainline kernel will be installed on the next update."
         )
     else:
         print(

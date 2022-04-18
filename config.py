@@ -3,6 +3,7 @@ from pathlib import Path
 from shutil import rmtree
 from subprocess import run
 from textwrap import dedent
+from typing import NoReturn
 
 config_path = Path("~/.rhino/config/").expanduser()
 config_path.mkdir(parents=True, exist_ok=True)
@@ -25,7 +26,7 @@ def ask(message: str, default_yes: bool = True) -> bool:
         return False
 
 
-def main():
+def main() -> NoReturn:
     # Splash screen
     print(
         dedent(

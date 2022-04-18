@@ -35,8 +35,13 @@ def main():
             """
             Welcome to the Rhino configuration script.
             ---
-            The Rhino Configuration script allows for you to customise the rhino-update utility and extend its capabilities, such as allowing for the installation of unsupported software.
-            Please be cautious when using rhino-config, issues can arise from some of the settings so please ensure that you know what you are doing and have read the documentation.
+            The Rhino Configuration script allows for you to customise the
+            rhino-update utility and extend its capabilities, such as allowing
+            for the installation of unsupported software.
+
+            Please be cautious when using rhino-config, issues can arise from
+            some of the settings so please ensure that you know what you are
+            doing and have read the documentation.
             ---
             """
         )

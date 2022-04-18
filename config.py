@@ -33,7 +33,7 @@ def main():
     print(
         dedent(
             """
-            Welcome to the Rhino configuration script
+            Welcome to the Rhino configuration script.
             ---
             The Rhino Configuration script allows for you to customise the rhino-update utility and extend its capabilities, such as allowing for the installation of unsupported software.
             Please be cautious when using rhino-config, issues can arise from some of the settings so please ensure that you know what you are doing and have read the documentation.
@@ -67,7 +67,7 @@ def main():
         print("Configuration updated, snapd has been removed from the system.")
     else:
         print(
-            "No changes were made to the Rhino configuration, snapd has not been purged"
+            "No changes were made to the Rhino configuration, snapd has not been purged."
         )
 
     # Print that the program has completed and then exit

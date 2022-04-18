@@ -74,7 +74,7 @@ def main():
     print(
         "\nrhino-config has completed, please run rhino-update to update your system!"
     )
-    quit()
+    sys.exit()
 
 
 if __name__ == "__main__":

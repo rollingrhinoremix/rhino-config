@@ -1,8 +1,7 @@
-# Imports
-import os
 import sys
 from pathlib import Path
 from shutil import rmtree
+from subprocess import run
 from textwrap import dedent
 
 config_path = Path("~/.rhino/config/").expanduser()
@@ -61,14 +60,26 @@ def main():
 
     if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpaks?"):
         (config_path / "snapdpurge").touch(exist_ok=True)
-        os.system("sudo rm -rf /var/cache/snapd/")
-        os.system("sudo apt autoremove --purge snapd gnome-software-plugin-snap -y")
+
+        run(["sudo", "rm", "-rf" "/var/cache/snapd/"])
+        run(["sudo", "apt", "autopurge", "snapd", "gnome-software-plugin-snap", "-y"])
+
         rmtree(Path("~/snap").expanduser(), ignore_errors=True)
-        os.system("sudo apt-mark hold snapd")
-        os.system("sudo apt install flatpak gnome-software-plugin-flatpak -y")
-        os.system(
-            "flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
+
+        run(["sudo", "apt-mark", "hold", "snapd"])
+        run(
+            ["sudo", "apt", "install", "flatpak", "gnome-software-plugin-flatpak", "-y"]
         )
+        run(
+            [
+                "flatpak",
+                "remote-add",
+                "--if-not-exists",
+                "flathub",
+                "https://flathub.org/repo/flathub.flatpakrepo",
+            ]
+        )
+
         print("Configuration updated, snapd has been removed from the system.")
     else:
         print(

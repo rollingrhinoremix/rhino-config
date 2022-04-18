@@ -21,10 +21,8 @@ def ask(message: str, default_yes: bool = True) -> bool:
 
     if reply in ["Y", ""]:
         return True
-    elif reply == "N":
-        return False
     else:
-        sys.exit("Unknown reply. Aborting.")
+        return False
 
 
 def main():

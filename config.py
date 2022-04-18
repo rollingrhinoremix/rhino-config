@@ -7,9 +7,6 @@ from subprocess import run
 from textwrap import dedent
 from typing import NoReturn
 
-config_path = Path("~/.rhino/config/").expanduser()
-config_path.mkdir(parents=True, exist_ok=True)
-
 
 def ask(message: str, default_yes: bool = True) -> bool:
     """
@@ -29,6 +26,9 @@ def ask(message: str, default_yes: bool = True) -> bool:
 
 
 def main() -> NoReturn:
+    config_path = Path("~/.rhino/config/").expanduser()
+    config_path.mkdir(parents=True, exist_ok=True)
+
     # Splash screen
     print(
         dedent(

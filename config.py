@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
 from pathlib import Path
 from shutil import rmtree
 from subprocess import run
-import sys
 from textwrap import dedent
 from typing import NoReturn
 

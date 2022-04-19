@@ -47,45 +47,65 @@ def main() -> NoReturn:
         )
     )
 
-    if ask("Do you wish to install the latest Linux mainline kernel?"):
-        (config_path / "mainline").touch(exist_ok=True)
-        print(
-            "Configuration updated! The mainline kernel will be installed on the next update."
-        )
-    else:
-        print(
-            "No changes were made to the Rhino configuration, The mainline kernel will not be installed."
-        )
+    mainline_config_path = config_path / "mainline"
+    if not mainline_config_path.exists():
+        if ask("Do you wish to install the latest Linux mainline kernel?"):
+            mainline_config_path.touch()
+            print(
+                "Configuration updated! The mainline kernel will be installed on the next update."
+            )
+        else:
+            print(
+                "No changes were made to the Rhino configuration, The mainline kernel will not be installed."
+            )
 
-    print("---")
+        print("---")
 
-    if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpaks?"):
-        (config_path / "snapdpurge").touch(exist_ok=True)
+    snapd_purge_config_path = config_path / "snapdpurge"
+    if not snapd_purge_config_path.exists():
+        if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpaks?"):
+            snapd_purge_config_path.touch()
 
-        run(["sudo", "rm", "-rf", "/var/cache/snapd/"])
-        run(["sudo", "apt", "autopurge", "snapd", "gnome-software-plugin-snap", "-y"])
+            run(["sudo", "rm", "-rf", "/var/cache/snapd/"])
+            run(
+                [
+                    "sudo",
+                    "apt",
+                    "autopurge",
+                    "snapd",
+                    "gnome-software-plugin-snap",
+                    "-y",
+                ]
+            )
 
-        rmtree(Path("~/snap").expanduser(), ignore_errors=True)
+            rmtree(Path("~/snap").expanduser(), ignore_errors=True)
 
-        run(["sudo", "apt-mark", "hold", "snapd"])
-        run(
-            ["sudo", "apt", "install", "flatpak", "gnome-software-plugin-flatpak", "-y"]
-        )
-        run(
-            [
-                "flatpak",
-                "remote-add",
-                "--if-not-exists",
-                "flathub",
-                "https://flathub.org/repo/flathub.flatpakrepo",
-            ]
-        )
+            run(["sudo", "apt-mark", "hold", "snapd"])
+            run(
+                [
+                    "sudo",
+                    "apt",
+                    "install",
+                    "flatpak",
+                    "gnome-software-plugin-flatpak",
+                    "-y",
+                ]
+            )
+            run(
+                [
+                    "flatpak",
+                    "remote-add",
+                    "--if-not-exists",
+                    "flathub",
+                    "https://flathub.org/repo/flathub.flatpakrepo",
+                ]
+            )
 
-        print("Configuration updated, snapd has been removed from the system.")
-    else:
-        print(
-            "No changes were made to the Rhino configuration, snapd has not been purged."
-        )
+            print("Configuration updated, snapd has been removed from the system.")
+        else:
+            print(
+                "No changes were made to the Rhino configuration, snapd has not been purged."
+            )
 
     # Print that the program has completed and then exit
     print(

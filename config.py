@@ -18,11 +18,7 @@ def ask(message: str, default_yes: bool = True) -> bool:
     """
 
     reply = input(f"{message} {'[Y/n]' if default_yes else '[y/N]'} ").strip().upper()
-
-    if reply in ["Y", ""]:
-        return True
-    else:
-        return False
+    return True if reply in ["Y", ""] else False
 
 
 def main() -> NoReturn:
@@ -47,8 +43,7 @@ def main() -> NoReturn:
         )
     )
 
-    mainline_config_path = config_path / "mainline"
-    if not mainline_config_path.exists():
+    if not (mainline_config_path := config_path / "mainline").exists():
         if ask("Do you wish to install the latest Linux mainline kernel?"):
             mainline_config_path.touch()
             print(
@@ -61,8 +56,7 @@ def main() -> NoReturn:
 
         print("---")
 
-    snapd_purge_config_path = config_path / "snapdpurge"
-    if not snapd_purge_config_path.exists():
+    if not (snapd_purge_config_path := config_path / "snapdpurge").exists():
         if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpaks?"):
             snapd_purge_config_path.touch()
 
@@ -105,6 +99,27 @@ def main() -> NoReturn:
         else:
             print(
                 "No changes were made to the Rhino configuration, snapd has not been purged."
+            )
+
+    if not (pacstall_config_path := config_path / "pacstall").exists():
+        if ask(
+            "Do you wish to enable Pacstall, an additional AUR-like package manager for Ubuntu on this system?"
+        ):
+            pacstall_config_path.touch()
+
+            print(
+                dedent(
+                    """
+                    Pacstall has been enabled on the system, please check the
+                    pacstall documentation on our website for information on how to
+                    use this utility.
+                    """
+                ).strip()
+            )
+
+        else:
+            print(
+                "No changes were made to the Rhino configuration, Pacstall has not been enabled."
             )
 
     # Print that the program has completed and then exit

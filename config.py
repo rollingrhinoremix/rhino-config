@@ -107,6 +107,27 @@ def main() -> NoReturn:
                 "No changes were made to the Rhino configuration, snapd has not been purged."
             )
 
+    if not (pacstall_config_path := config_path / "pacstall").exists():
+        if ask(
+            "Do you wish to enable Pacstall, an additional AUR-like package manager for Ubuntu on this system?"
+        ):
+            pacstall_config_path.touch()
+
+            print(
+                dedent(
+                    """
+                    Pacstall has been enabled on the system, please check the
+                    pacstall documentation on our website for information on how to
+                    use this utility.
+                    """
+                ).strip()
+            )
+
+        else:
+            print(
+                "No changes were made to the Rhino configuration, Pacstall has not been enabled."
+            )
+
     # Print that the program has completed and then exit
     print(
         "\nrhino-config has completed, please run rhino-update to update your system!"

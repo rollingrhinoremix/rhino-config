@@ -18,11 +18,7 @@ def ask(message: str, default_yes: bool = True) -> bool:
     """
 
     reply = input(f"{message} {'[Y/n]' if default_yes else '[y/N]'} ").strip().upper()
-
-    if reply in ["Y", ""]:
-        return True
-    else:
-        return False
+    return True if reply in ["Y", ""] else False
 
 
 def main() -> NoReturn:
@@ -47,8 +43,7 @@ def main() -> NoReturn:
         )
     )
 
-    mainline_config_path = config_path / "mainline"
-    if not mainline_config_path.exists():
+    if not (mainline_config_path := config_path / "mainline").exists():
         if ask("Do you wish to install the latest Linux mainline kernel?"):
             mainline_config_path.touch()
             print(
@@ -61,8 +56,7 @@ def main() -> NoReturn:
 
         print("---")
 
-    snapd_purge_config_path = config_path / "snapdpurge"
-    if not snapd_purge_config_path.exists():
+    if not (snapd_purge_config_path := config_path / "snapdpurge").exists():
         if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpaks?"):
             snapd_purge_config_path.touch()
 

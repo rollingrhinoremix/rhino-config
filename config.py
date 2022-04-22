@@ -138,7 +138,7 @@ def enable(
         False,
         "-p",
         "--pacstall",
-        help="Enable Pacstall,  an additional AUR-like package manager for Ubuntu.",
+        help="Enable Pacstall, an additional AUR-like package manager for Ubuntu.",
     ),
     interactive: bool = Option(False, "-i", "--interactive", help="Run interactively."),
 ) -> NoReturn:
@@ -208,19 +208,19 @@ def enable(
 @app.command()
 def disable(
     mainline: bool = Option(
-        False, "-m", "--mainline", help="Install the latest Linux mainline kernel."
+        False, "-m", "--mainline", help="Disable the latest Linux mainline kernel."
     ),
     snapdpurge: bool = Option(
         False,
         "-s",
         "--snapdpurge",
-        help="Remove Snapcraft (snapd) and replace it with Flatpak.",
+        help="Add back Snapcraft (snapd).",
     ),
     pacstall: bool = Option(
         False,
         "-p",
         "--pacstall",
-        help="Enable Pacstall,  an additional AUR-like package manager for Ubuntu.",
+        help="Disable Pacstall, an additional AUR-like package manager for Ubuntu.",
     ),
 ) -> None:
     """Disable a config option."""

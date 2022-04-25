@@ -1,7 +1,6 @@
-use std::env;
-use std::fs;
 use std::io::{Error, ErrorKind};
 use std::path::PathBuf;
+use std::{env, fs};
 
 use clap::CommandFactory;
 use clap_complete::{generate_to, shells};

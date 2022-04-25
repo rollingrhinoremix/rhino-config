@@ -14,8 +14,8 @@ use crate::commands::{disable, enable};
 
 /// Ask the user a question.
 ///
-/// Asks the user a question, and returns `true` or `false` depending upon if they answered *yes*
-/// or *no*.
+/// Asks the user a question, and returns `true` or `false` depending upon if
+/// they answered *yes* or *no*.
 ///
 /// # Arguments
 ///
@@ -50,10 +50,12 @@ fn ask(message: &str, default_yes: bool) -> bool {
     matches!(reply.as_ref(), "Y" | "")
 }
 
-/// Macro to make [`ask`](fn@ask)'s `default_yes` argument a default argument of true.
+/// Macro to make [`ask`](fn@ask)'s `default_yes` argument a default argument of
+/// true.
 ///
-/// Always use this macro instead of the [`ask`](fn@ask) function directly, as it enables you to
-/// skip providing the `default_yes` parameter to the [`ask`](fn@ask) function when not needed.
+/// Always use this macro instead of the [`ask`](fn@ask) function directly, as
+/// it enables you to skip providing the `default_yes` parameter to the
+/// [`ask`](fn@ask) function when not needed.
 ///
 /// # Arguments
 ///
@@ -70,10 +72,10 @@ fn ask(message: &str, default_yes: bool) -> bool {
 /// ask!("Do you want to destroy your computer?", false);
 /// ```
 macro_rules! ask {
-    ($message: expr) => {
+    ($message:expr) => {
         ask($message, true)
     };
-    ($message: expr, $default_yes: expr) => {
+    ($message:expr, $default_yes:expr) => {
         ask($message, $default_yes)
     };
 }
@@ -98,7 +100,10 @@ fn main() -> Result<(), u8> {
                     if ask!("Do you wish to install the Linux mainline kernel?") {
                         enable::mainline(&mainline_config_path);
                     } else {
-                        println!("No changes were made to the Rhino configuration, the mainline kernel will not be installed.");
+                        println!(
+                            "No changes were made to the Rhino configuration, the mainline kernel \
+                             will not be installed."
+                        );
                     }
                 }
 
@@ -107,15 +112,24 @@ fn main() -> Result<(), u8> {
                     {
                         enable::snapdpurge(&snapdpurge_config_path, &home_dir);
                     } else {
-                        println!("No changes were made to the Rhino configuration, snapd has not been purged.");
+                        println!(
+                            "No changes were made to the Rhino configuration, snapd has not been \
+                             purged."
+                        );
                     }
                 }
 
                 if !pacstall_config_path.exists() {
-                    if ask!("Do you wish to enable Pacstall, an additional AUR-like package manager for Ubuntu on this system?") {
+                    if ask!(
+                        "Do you wish to enable Pacstall, an additional AUR-like package manager \
+                         for Ubuntu on this system?"
+                    ) {
                         enable::pacstall(&pacstall_config_path);
                     } else {
-                        println!("No changes were made to the Rhino configuration, Pacstall has not been enabled.");
+                        println!(
+                            "No changes were made to the Rhino configuration, Pacstall has not \
+                             been enabled."
+                        );
                     }
                 }
             }
@@ -145,7 +159,7 @@ fn main() -> Result<(), u8> {
             }
 
             Ok(())
-        }
+        },
         Commands::Disable(flag) => {
             if flag.mainline {
                 if !mainline_config_path.exists() {
@@ -169,6 +183,6 @@ fn main() -> Result<(), u8> {
             }
 
             Ok(())
-        }
+        },
     }
 }

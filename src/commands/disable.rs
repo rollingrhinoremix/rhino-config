@@ -11,7 +11,7 @@ pub fn snapdpurge(config_path: &Path) {
     fs::remove_file(&config_path).expect("Unable to remove snapdpurge config file!");
     println!("Snapdpurge has been disabled.");
 
-    println!("Reinstalling Snapcradt");
+    println!("Reinstalling Snapcraft...");
 
     Command::new("sudo")
         .args([

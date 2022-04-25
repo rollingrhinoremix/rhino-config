@@ -6,18 +6,20 @@ use indoc::indoc;
 
 pub fn mainline(config_path: &Path) {
     File::create(config_path).expect("Failed to create the mainline config file!");
-    println!("Configuration updated! The mainline kernel would be installed on the next update.");
+    println!(
+        r#"The mainline kernel has been enabled - please run "rhino-update" to update your system."#
+    );
 }
 
 pub fn pacstall(config_path: &Path) {
     File::create(config_path).expect("Unable to create pacstall config!");
 
     println!(indoc!(
-        "
+        r#"
         Pacstall has been enabled on the system, please check the
         pacstall documentation on our website for information on how to
-        use this utility.
-        "
+        use this utility - please run "rhino-update" to update your system.
+        "#
     ));
 }
 

@@ -2,13 +2,17 @@ use std::fs;
 use std::path::Path;
 use std::process::Command;
 
-pub fn mainline(config_path: &Path) {
-    fs::remove_file(&config_path).expect("Unable to remove mainline config file!");
+use anyhow::{Context, Result};
+
+pub fn mainline(config_path: &Path) -> Result<()> {
+    fs::remove_file(&config_path).context("Unable to remove mainline config file!")?;
     println!("Mainline kernel has been disabled.");
+
+    Ok(())
 }
 
-pub fn snapdpurge(config_path: &Path) {
-    fs::remove_file(&config_path).expect("Unable to remove snapdpurge config file!");
+pub fn snapdpurge(config_path: &Path) -> Result<()> {
+    fs::remove_file(&config_path).context("Unable to remove snapdpurge config file!")?;
     println!("Snapdpurge has been disabled.");
 
     println!("Reinstalling Snapcraft...");
@@ -22,10 +26,12 @@ pub fn snapdpurge(config_path: &Path) {
             "-y",
         ])
         .spawn()
-        .expect("Unable to reinstall snapd!");
+        .context("Unable to reinstall snapd!")?;
 
     Command::new("sudo")
         .args(["apt-mark", "unhold", "snapd"])
         .spawn()
-        .expect("Unable to unhold snapd!");
+        .context("Unable to unhold snapd!")?;
+
+    Ok(())
 }

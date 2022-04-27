@@ -5,8 +5,8 @@ use std::env::var;
 use std::fs;
 use std::io::{self, Write};
 use std::path::Path;
-use std::result::Result;
 
+use anyhow::{ensure, Context, Result};
 use clap::Parser;
 
 use crate::cli::{Cli, Commands};
@@ -41,14 +41,14 @@ fn ask(message: &str) -> bool {
     matches!(reply.as_ref(), "Y" | "")
 }
 
-fn main() -> Result<(), u8> {
+fn main() -> Result<()> {
     let cli = Cli::parse();
 
-    let home_dir = var("HOME").expect("Unable to find HOME environment variable!");
+    let home_dir = var("HOME").context("Unable to find HOME environment variable!")?;
 
     let config_dir = format!("{}/.rhino/config/", home_dir);
     let config_path = Path::new(&config_dir);
-    fs::create_dir_all(config_path).expect("Failed to create config directory!");
+    fs::create_dir_all(config_path).context("Failed to create config directory!")?;
 
     let pacstall_config_path = config_path.join("pacstall");
     let mainline_config_path = config_path.join("mainline");
@@ -59,7 +59,7 @@ fn main() -> Result<(), u8> {
             if flag.interactive {
                 if !mainline_config_path.exists() {
                     if ask("Do you wish to install the Linux mainline kernel?") {
-                        enable::mainline(&mainline_config_path);
+                        enable::mainline(&mainline_config_path)?;
                     } else {
                         println!(
                             "No changes were made to the Rhino configuration, the mainline kernel \
@@ -70,7 +70,7 @@ fn main() -> Result<(), u8> {
 
                 if !snapdpurge_config_path.exists() {
                     if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpak?") {
-                        enable::snapdpurge(&snapdpurge_config_path, &home_dir);
+                        enable::snapdpurge(&snapdpurge_config_path, &home_dir)?;
                     } else {
                         println!(
                             "No changes were made to the Rhino configuration, snapd has not been \
@@ -84,7 +84,7 @@ fn main() -> Result<(), u8> {
                         "Do you wish to enable Pacstall, an additional AUR-like package manager \
                          for Ubuntu on this system?",
                     ) {
-                        enable::pacstall(&pacstall_config_path);
+                        enable::pacstall(&pacstall_config_path)?;
                     } else {
                         println!(
                             "No changes were made to the Rhino configuration, Pacstall has not \
@@ -95,51 +95,52 @@ fn main() -> Result<(), u8> {
             }
 
             if flag.mainline {
-                if mainline_config_path.exists() {
-                    println!("Mainline kernel is already enabled!");
-                    return Err(1);
-                }
-                enable::mainline(&mainline_config_path);
+                ensure!(
+                    !mainline_config_path.exists(),
+                    "Mainine kernel is already enabled!"
+                );
+                enable::mainline(&mainline_config_path)?;
             }
 
             if flag.snapdpurge {
-                if snapdpurge_config_path.exists() {
-                    println!("Mainline kernel is already enabled!");
-                    return Err(1);
-                }
-                enable::snapdpurge(&snapdpurge_config_path, &home_dir);
+                ensure!(
+                    !snapdpurge_config_path.exists(),
+                    "Mainline kernel is already enabled!"
+                );
+                enable::snapdpurge(&snapdpurge_config_path, &home_dir)?;
             }
 
             if flag.pacstall {
-                if pacstall_config_path.exists() {
-                    println!("Pacstall is already enabled!");
-                    return Err(1);
-                }
-                enable::pacstall(&pacstall_config_path);
+                ensure!(
+                    !pacstall_config_path.exists(),
+                    "Pacstall is already enabled!"
+                );
+                enable::pacstall(&pacstall_config_path)?;
             }
 
             Ok(())
         },
         Commands::Disable(flag) => {
             if flag.mainline {
-                if !mainline_config_path.exists() {
-                    println!("Mainline kernel is already disabled!");
-                    return Err(1);
-                }
+                ensure!(
+                    mainline_config_path.exists(),
+                    "Mainline kernel is already disabled!"
+                );
 
-                disable::mainline(&mainline_config_path);
+                disable::mainline(&mainline_config_path)?;
             }
 
             if flag.snapdpurge {
-                if !snapdpurge_config_path.exists() {
-                    println!("Snapdpurge is already disabled!");
-                    return Err(1);
-                }
+                ensure!(
+                    snapdpurge_config_path.exists(),
+                    "Snapdpurge is already disabled!"
+                );
+
                 println!("Snapdpurge has been disabled.");
 
                 println!("Reinstalling Snapcraft");
 
-                disable::snapdpurge(&snapdpurge_config_path);
+                disable::snapdpurge(&snapdpurge_config_path)?;
             }
 
             Ok(())

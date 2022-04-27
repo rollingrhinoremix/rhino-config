@@ -2,17 +2,19 @@ use std::fs::{self, File};
 use std::path::Path;
 use std::process::Command;
 
+use anyhow::{Context, Result};
 use indoc::indoc;
 
-pub fn mainline(config_path: &Path) {
-    File::create(config_path).expect("Failed to create the mainline config file!");
+pub fn mainline(config_path: &Path) -> Result<()> {
+    File::create(config_path).context("Failed to create the mainline config file!")?;
     println!(
         r#"The mainline kernel has been enabled - please run "rhino-update" to update your system."#
     );
+    Ok(())
 }
 
-pub fn pacstall(config_path: &Path) {
-    File::create(config_path).expect("Unable to create pacstall config!");
+pub fn pacstall(config_path: &Path) -> Result<()> {
+    File::create(config_path).context("Unable to create pacstall config!")?;
 
     println!(indoc!(
         r#"
@@ -21,15 +23,16 @@ pub fn pacstall(config_path: &Path) {
         use this utility - please run "rhino-update" to update your system.
         "#
     ));
+    Ok(())
 }
 
-pub fn snapdpurge(config_path: &Path, home_dir: &str) {
-    File::create(config_path).expect("Failed to create the snapdpurge config!");
+pub fn snapdpurge(config_path: &Path, home_dir: &str) -> Result<()> {
+    File::create(config_path).context("Failed to create the snapdpurge config!")?;
 
     Command::new("sudo")
         .args(["rm", "-rf", "/var/cache/snapd/"])
         .spawn()
-        .expect("Failed to remove snapd cache!");
+        .context("Failed to remove snapd cache!")?;
 
     Command::new("sudo")
         .args([
@@ -40,10 +43,10 @@ pub fn snapdpurge(config_path: &Path, home_dir: &str) {
             "-y",
         ])
         .spawn()
-        .expect("Failed to remove snapd cache!");
+        .context("Failed to remove snapd cache!")?;
 
     fs::remove_dir_all(Path::new(&format!("{}/snap", home_dir)))
-        .expect("Failed to remove snap directory!");
+        .context("Failed to remove snap directory!")?;
 
     Command::new("sudo")
         .args([
@@ -54,7 +57,7 @@ pub fn snapdpurge(config_path: &Path, home_dir: &str) {
             "-y",
         ])
         .spawn()
-        .expect("Failed to install flatpak!");
+        .context("Failed to install flatpak!")?;
 
     Command::new("flatpak")
         .args([
@@ -64,7 +67,8 @@ pub fn snapdpurge(config_path: &Path, home_dir: &str) {
             "https://flathub.org/repo/flathub.flatpakrepo",
         ])
         .spawn()
-        .expect("Failed to add flathub repository!");
+        .context("Failed to add flathub repository!")?;
 
     println!("Configuration updated, snapd has been removed from the system.");
+    Ok(())
 }

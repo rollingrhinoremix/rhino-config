@@ -136,10 +136,6 @@ fn main() -> Result<()> {
                     "Snapdpurge is already disabled!"
                 );
 
-                println!("Snapdpurge has been disabled.");
-
-                println!("Reinstalling Snapcraft");
-
                 disable::snapdpurge(&snapdpurge_config_path)?;
             }
 

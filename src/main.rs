@@ -143,6 +143,15 @@ fn main() -> Result<()> {
                 disable::snapdpurge(&snapdpurge_config_path)?;
             }
 
+            if flag.pacstall {
+                ensure!(
+                    pacstall_config_path.exists(),
+                    "Pacstall is already disabled!"
+                );
+
+                disable::pacstall(&pacstall_config_path)?;
+            }
+
             Ok(())
         },
     }

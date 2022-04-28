@@ -35,3 +35,9 @@ pub fn snapdpurge(config_path: &Path) -> Result<()> {
 
     Ok(())
 }
+
+pub fn pacstall(config_path: &Path) -> Result<()> {
+    fs::remove_file(&config_path).context("Unable to remove pacstall config file!")?;
+    println!("Pacstall has been disabled.");
+    Ok(())
+}

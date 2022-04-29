@@ -16,3 +16,4 @@ replit.nix
 
 # Gitpod
 gitpod.yml
+setup.sh

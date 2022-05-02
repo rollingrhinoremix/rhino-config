@@ -27,7 +27,7 @@ use crate::commands::{disable, enable};
 /// ask("Do you want to continue?"); 
 /// ```
 fn ask(message: &str) -> bool {
-    print!("{} [Y/n] ", message,);
+    print!("{} [Y/n] ", message);
     io::stdout().flush().unwrap();
 
     let mut reply = String::new();
@@ -45,14 +45,16 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     let home_dir = var("HOME").context("Unable to find HOME environment variable!")?;
+    let home_path = Path::new(&home_dir);
 
-    let config_dir = format!("{}/.rhino/config/", home_dir);
-    let config_path = Path::new(&config_dir);
-    fs::create_dir_all(config_path).context("Failed to create config directory!")?;
+    let config_path = home_path.join(".rhino/config/");
+    fs::create_dir_all(&config_path).context("Failed to create config directory!")?;
 
     let pacstall_config_path = config_path.join("pacstall");
     let mainline_config_path = config_path.join("mainline");
+
     let snapdpurge_config_path = config_path.join("snapdpurge");
+    let snapdpurge_snap_path = home_path.join("snap/");
 
     match &cli.command {
         Commands::Enable(flag) => {
@@ -70,7 +72,7 @@ fn main() -> Result<()> {
 
                 if !snapdpurge_config_path.exists() {
                     if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpak?") {
-                        enable::snapdpurge(&snapdpurge_config_path, &home_dir)?;
+                        enable::snapdpurge(&snapdpurge_config_path, &snapdpurge_snap_path)?;
                     } else {
                         println!(
                             "No changes were made to the Rhino configuration, snapd has not been \
@@ -105,9 +107,9 @@ fn main() -> Result<()> {
             if flag.snapdpurge {
                 ensure!(
                     !snapdpurge_config_path.exists(),
-                    "Mainline kernel is already enabled!"
+                    "Snapdpurge is already enabled!"
                 );
-                enable::snapdpurge(&snapdpurge_config_path, &home_dir)?;
+                enable::snapdpurge(&snapdpurge_config_path, &snapdpurge_snap_path)?;
             }
 
             if flag.pacstall {

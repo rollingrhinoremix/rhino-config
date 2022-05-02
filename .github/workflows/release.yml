@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  workflow_dispatch
+
+
+env:
+  CARGO_TERM_COLOR: always
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: cargo build --release
+      - name: Move generated files
+      - run: mv target/release/build/rhino-config-*/out/* target/release/
+      - uses: actions/upload-artifact@v3
+        with:
+          name: rhino-config
+          path: |
+            target/release/rhino-config
+            target/release/_rhino-config.ps1
+            target/release/rhino-config.1
+            target/release/rhino-config.bash
+            target/release/rhino-config.elv
+            target/release/rhino-config.fish
+        

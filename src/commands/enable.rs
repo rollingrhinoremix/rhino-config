@@ -31,9 +31,8 @@ pub fn snapdpurge(config_path: &Path, snap_path: &Path) -> Result<()> {
 
     ensure!(Command::new("sudo")
         .args(["rm", "-rf", "/var/cache/snapd/"])
-        .spawn()
+        .status()
         .context("Failed to remove snapd cache!")?
-        .wait()?
         .success());
 
     ensure!(Command::new("sudo")
@@ -44,9 +43,8 @@ pub fn snapdpurge(config_path: &Path, snap_path: &Path) -> Result<()> {
             "gnome-software-plugin-snap",
             "-y",
         ])
-        .spawn()
+        .status()
         .context("Failed to remove snapd cache!")?
-        .wait()?
         .success());
 
     fs::remove_dir_all(&snap_path).context("Failed to remove snap directory!")?;
@@ -59,9 +57,8 @@ pub fn snapdpurge(config_path: &Path, snap_path: &Path) -> Result<()> {
             "gnome-software-plugin-flatpak",
             "-y",
         ])
-        .spawn()
+        .status()
         .context("Failed to install flatpak!")?
-        .wait()?
         .success());
 
     ensure!(Command::new("sudo")
@@ -72,9 +69,8 @@ pub fn snapdpurge(config_path: &Path, snap_path: &Path) -> Result<()> {
             "flathub",
             "https://flathub.org/repo/flathub.flatpakrepo",
         ])
-        .spawn()
+        .status()
         .context("Failed to add flathub repository!")?
-        .wait()?
         .success());
 
     println!("Configuration updated, snapd has been removed from the system.");

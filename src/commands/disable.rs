@@ -10,6 +10,34 @@ pub fn mainline(config_path: &Path) -> Result<()> {
 
     Ok(())
 }
+pub fn pacstall(config_path: &Path) -> Result<()> {
+    fs::remove_file(&config_path).context("Unable to remove pacstall config file!")?;
+    println!("Pacstall has been disabled.");
+    println!("Removing pacstall...");
+
+    // Get the uninstall script from `curl` or `wget` depending upon which is
+    // installed on the system. Capture the output also.
+    let uninstall_script = if Command::new("curl").output()?.status.success() {
+        String::from_utf8(
+            Command::new("curl")
+                .args(["-fsSL", "https://git.io/JEZbi"])
+                .output()?
+                .stdout,
+        )?
+    } else {
+        String::from_utf8(
+            Command::new("wget")
+                .args(["-q", "https://git.io/JEZbi", "-O", "-"])
+                .output()?
+                .stdout,
+        )?
+    };
+    ensure!(Command::new("bash")
+        .args(["-c", &uninstall_script])
+        .status()?
+        .success());
+    Ok(())
+}
 
 pub fn snapdpurge(config_path: &Path) -> Result<()> {
     fs::remove_file(&config_path).context("Unable to remove snapdpurge config file!")?;
@@ -35,12 +63,6 @@ pub fn snapdpurge(config_path: &Path) -> Result<()> {
         .context("Unable to unhold snapd!")?
         .success());
 
-    Ok(())
-}
-
-pub fn pacstall(config_path: &Path) -> Result<()> {
-    fs::remove_file(&config_path).context("Unable to remove pacstall config file!")?;
-    println!("Pacstall has been disabled.");
     Ok(())
 }
 

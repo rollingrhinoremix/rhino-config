@@ -11,11 +11,11 @@ build = "build.rs"
 
 [dependencies]
 anyhow = "1.0.57"
-clap = { version = "~3.1.10", features = ["derive"] }
+clap = { version = "~3.1.17", features = ["derive"] }
 indoc = "1.0.4"
 
 [build-dependencies]
-clap = { version = "~3.1.10", features = ["derive"] }
+clap = { version = "~3.1.17", features = ["derive"] }
 clap_complete = "3.1.2"
 clap_mangen = "0.1.6"
 

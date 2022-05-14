@@ -4,12 +4,6 @@ use std::process::Command;
 
 use anyhow::{ensure, Context, Result};
 
-pub fn mainline(config_path: &Path) -> Result<()> {
-    fs::remove_file(&config_path).context("Unable to remove mainline config file!")?;
-    println!("Mainline kernel has been disabled.");
-
-    Ok(())
-}
 pub fn pacstall(config_path: &Path) -> Result<()> {
     fs::remove_file(&config_path).context("Unable to remove pacstall config file!")?;
     println!("Pacstall has been disabled.");
@@ -78,18 +72,6 @@ mod tests {
 
     #[fixture]
     fn temp_dir() -> TempDir { tempdir().unwrap() }
-
-    #[rstest]
-    fn test_mainline(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {
-        let config_path = temp_dir.path().join("mainline");
-        File::create(&config_path)?;
-
-        super::mainline(&config_path)?;
-        // Test that the config file is deleted
-        assert!(!config_path.exists());
-
-        Ok(())
-    }
 
     #[rstest]
     fn test_pacstall(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {

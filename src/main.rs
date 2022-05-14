@@ -51,7 +51,6 @@ fn main() -> Result<()> {
     fs::create_dir_all(&config_path).context("Failed to create config directory!")?;
 
     let pacstall_config_path = config_path.join("pacstall");
-    let mainline_config_path = config_path.join("mainline");
 
     let snapdpurge_config_path = config_path.join("snapdpurge");
     let snapdpurge_snap_path = home_path.join("snap/");
@@ -104,15 +103,6 @@ fn main() -> Result<()> {
             Ok(())
         },
         Commands::Disable(flag) => {
-            if flag.mainline {
-                ensure!(
-                    mainline_config_path.exists(),
-                    "Mainline kernel is already disabled!"
-                );
-
-                disable::mainline(&mainline_config_path)?;
-            }
-
             if flag.snapdpurge {
                 ensure!(
                     snapdpurge_config_path.exists(),

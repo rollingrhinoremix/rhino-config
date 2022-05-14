@@ -33,7 +33,7 @@ pub enum Commands {
 #[clap(group(
     ArgGroup::new("operations")
         .multiple(true)
-        .args(&["mainline", "pacstall", "snapdpurge"]),
+        .args(&["pacstall", "snapdpurge"]),
 ))]
 pub struct EnableCommand {
     /// Run interactively
@@ -45,14 +45,6 @@ pub struct EnableCommand {
     #[clap(required_unless_present("operations"))]
     #[clap(short, long)]
     pub interactive: bool,
-
-    /// Enable the latest Linux mainline kernel
-    ///
-    /// The latest kernel can be enabled via the rhino-config enable command.
-    /// This will download, install and keep the latest Linux kernel updated
-    /// via the Ubuntu mainline repositories
-    #[clap(short, long)]
-    pub mainline: bool,
 
     /// Enable Pacstall, an additional AUR-like package manager for Ubuntu
     ///

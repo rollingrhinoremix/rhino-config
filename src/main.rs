@@ -59,17 +59,6 @@ fn main() -> Result<()> {
     match &cli.command {
         Commands::Enable(flag) => {
             if flag.interactive {
-                if !mainline_config_path.exists() {
-                    if ask("Do you wish to install the Linux mainline kernel?") {
-                        enable::mainline(&mainline_config_path)?;
-                    } else {
-                        println!(
-                            "No changes were made to the Rhino configuration, the mainline kernel \
-                             will not be installed."
-                        );
-                    }
-                }
-
                 if !snapdpurge_config_path.exists() {
                     if ask("Do you wish to remove Snapcraft (snapd) and replace it with Flatpak?") {
                         enable::snapdpurge(&snapdpurge_config_path, &snapdpurge_snap_path)?;
@@ -94,14 +83,6 @@ fn main() -> Result<()> {
                         );
                     }
                 }
-            }
-
-            if flag.mainline {
-                ensure!(
-                    !mainline_config_path.exists(),
-                    "Mainine kernel is already enabled!"
-                );
-                enable::mainline(&mainline_config_path)?;
             }
 
             if flag.snapdpurge {

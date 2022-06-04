@@ -155,6 +155,7 @@ fn main() -> Result<()> {
 
         Commands::SwitchKernel(kernel) => match &kernel {
             SwitchKernel::Xanmod => switch_kernel::xanmod(&config_path.join("xanmod")),
+            SwitchKernel::Liquorix => switch_kernel::liquorix(&config_path.join("liquorix")),
         },
     }
 }

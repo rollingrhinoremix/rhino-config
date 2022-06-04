@@ -115,4 +115,11 @@ pub enum SwitchKernel {
     /// settings and new features. Built to provide a stable, responsive and
     /// smooth desktop experience
     Xanmod,
+
+    /// Switch to the Liquorix kernel
+    ///
+    /// Liquorix is a distro kernel replacement built using the best
+    /// configuration and kernel sources for desktop, multimedia, and gaming
+    /// workloads
+    Liquorix,
 }

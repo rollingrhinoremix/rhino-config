@@ -9,6 +9,12 @@ pub fn xanmod(config_path: &Path) -> Result<()> {
     Ok(())
 }
 
+pub fn liquorix(config_path: &Path) -> Result<()> {
+    File::create(config_path).context("Failed to create the liquorix config file!")?;
+    println!(r#"The Liquorix kernel has been enabled - please run "rhino-update" to install it."#);
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use std::error::Error;
@@ -26,7 +32,18 @@ mod tests {
         super::xanmod(&config_path)?;
         // Test that the config file is created
         assert!(config_path.exists());
-        
+
+        Ok(())
+    }
+
+    #[rstest]
+    fn test_liquorix(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {
+        let config_path = temp_dir.path().join("liquorix");
+
+        super::liquorix(&config_path)?;
+        // Test that the config file is created
+        assert!(config_path.exists());
+
         Ok(())
     }
 }

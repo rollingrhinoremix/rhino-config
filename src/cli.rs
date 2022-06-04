@@ -27,6 +27,10 @@ pub enum Commands {
     ///
     /// Disable options you've enabled through this utility
     Disable(DisableCommand),
+
+    #[clap(subcommand)]
+    /// Switch to alternate kernels
+    SwitchKernel(SwitchKernel),
 }
 
 #[derive(Args)]
@@ -102,4 +106,13 @@ pub struct DisableCommand {
     /// system and will have to be manually removed
     #[clap(short, long)]
     pub snapdpurge: bool,
+}
+#[derive(Subcommand)]
+pub enum SwitchKernel {
+    /// Switch to the XanMod kernel
+    ///
+    /// XanMod is a general-purpose Linux kernel distribution with custom
+    /// settings and new features. Built to provide a stable, responsive and
+    /// smooth desktop experience
+    Xanmod,
 }

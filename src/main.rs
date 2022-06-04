@@ -9,8 +9,8 @@ use std::path::Path;
 use anyhow::{ensure, Context, Result};
 use clap::Parser;
 
-use crate::cli::{Cli, Commands};
-use crate::commands::{disable, enable};
+use crate::cli::{Cli, Commands, SwitchKernel};
+use crate::commands::{disable, enable, switch_kernel};
 
 /// Ask the user a question.
 ///
@@ -151,6 +151,10 @@ fn main() -> Result<()> {
             }
 
             Ok(())
+        },
+
+        Commands::SwitchKernel(kernel) => match &kernel {
+            SwitchKernel::Xanmod => switch_kernel::xanmod(&config_path.join("xanmod")),
         },
     }
 }

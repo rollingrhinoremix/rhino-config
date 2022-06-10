@@ -37,7 +37,7 @@ pub enum Commands {
 #[clap(group(
     ArgGroup::new("operations")
         .multiple(true)
-        .args(&["mainline", "pacstall", "snapdpurge"]),
+        .args(&["pacstall", "snapdpurge"]),
 ))]
 pub struct EnableCommand {
     /// Run interactively
@@ -49,14 +49,6 @@ pub struct EnableCommand {
     #[clap(required_unless_present("operations"))]
     #[clap(short, long)]
     pub interactive: bool,
-
-    /// Enable the latest Linux mainline kernel
-    ///
-    /// The latest kernel can be enabled via the rhino-config enable command.
-    /// This will download, install and keep the latest Linux kernel updated
-    /// via the Ubuntu mainline repositories
-    #[clap(short, long)]
-    pub mainline: bool,
 
     /// Enable Pacstall, an additional AUR-like package manager for Ubuntu
     ///
@@ -81,17 +73,9 @@ pub struct EnableCommand {
             ArgGroup::new("operations")
                 .required(true)
                 .multiple(true)
-                .args(&["mainline", "pacstall", "snapdpurge"]),
+                .args(&["pacstall", "snapdpurge"]),
         ))]
 pub struct DisableCommand {
-    /// Disable the latest Linux mainline kernel
-    ///
-    /// This disables the mainline kernel from being continually updated. If it
-    /// was enabled then it will still be installed on your system, however you
-    /// can revert to the kernel provided by Ubuntu in your grub menu
-    #[clap(short, long)]
-    pub mainline: bool,
-
     /// Disable Pacstall, an additional AUR-like package manager for Ubuntu
     ///
     /// This disables and uninstalls Pacstall from your system. Pacstall will

@@ -5,14 +5,6 @@ use std::process::Command;
 use anyhow::{ensure, Context, Result};
 use indoc::indoc;
 
-pub fn mainline(config_path: &Path) -> Result<()> {
-    File::create(config_path).context("Failed to create the mainline config file!")?;
-    println!(
-        r#"The mainline kernel has been enabled - please run "rhino-update" to update your system."#
-    );
-    Ok(())
-}
-
 pub fn pacstall(config_path: &Path) -> Result<()> {
     File::create(config_path).context("Unable to create pacstall config!")?;
 
@@ -87,17 +79,6 @@ mod tests {
 
     #[fixture]
     fn temp_dir() -> TempDir { tempdir().unwrap() }
-
-    #[rstest]
-    fn test_mainline(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {
-        let config_path = temp_dir.path().join("mainline");
-
-        super::mainline(&config_path)?;
-        // Test that the config file is created
-        assert!(config_path.exists());
-
-        Ok(())
-    }
 
     #[rstest]
     fn test_pacstall(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {

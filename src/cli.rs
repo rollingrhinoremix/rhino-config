@@ -27,6 +27,10 @@ pub enum Commands {
     ///
     /// Disable options you've enabled through this utility
     Disable(DisableCommand),
+
+    #[clap(subcommand)]
+    /// Switch to alternate kernels
+    SwitchKernel(SwitchKernel),
 }
 
 #[derive(Args)]
@@ -102,4 +106,40 @@ pub struct DisableCommand {
     /// system and will have to be manually removed
     #[clap(short, long)]
     pub snapdpurge: bool,
+}
+#[derive(Subcommand)]
+pub enum SwitchKernel {
+    /// Enable custom kernels
+    #[clap(subcommand)]
+    Enable(EnableKernel),
+
+    /// Disable custom kernels
+    #[clap(subcommand)]
+    Disable(DisableKernel),
+}
+
+#[derive(Subcommand)]
+pub enum EnableKernel {
+    /// Enable the XanMod kernel
+    ///
+    /// XanMod is a general-purpose Linux kernel distribution with custom
+    /// settings and new features. Built to provide a stable, responsive and
+    /// smooth desktop experience
+    Xanmod,
+
+    /// Enable the Liquorix kernel
+    ///
+    /// Liquorix is a distro kernel replacement built using the best
+    /// configuration and kernel sources for desktop, multimedia, and gaming
+    /// workloads
+    Liquorix,
+}
+
+#[derive(Subcommand)]
+pub enum DisableKernel {
+    /// Disable the XanMod kernel
+    Xanmod,
+
+    /// Disable the Liquorix kernel
+    Liquorix,
 }

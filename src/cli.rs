@@ -104,7 +104,7 @@ pub enum SwitchKernel {
 
 #[derive(Subcommand)]
 pub enum EnableKernel {
-    /// Enable the XanMod kernel. Defaults to the stable variant.
+    /// Enable the XanMod kernel. Defaults to the stable variant
     ///
     /// XanMod is a general-purpose Linux kernel distribution with custom
     /// settings and new features. Built to provide a stable, responsive and
@@ -117,15 +117,25 @@ pub enum EnableKernel {
     /// configuration and kernel sources for desktop, multimedia, and gaming
     /// workloads
     Liquorix,
+
+    /// Enable the Libre kernel
+    ///
+    /// Linux-libre is a modified version of the Linux kernel that contains no
+    /// binary blobs, obfuscated code, or code released under proprietary
+    /// licenses
+    Libre,
 }
 
 #[derive(Subcommand)]
 pub enum DisableKernel {
-    /// Disable the XanMod kernel. Defaults to the stable variant.
+    /// Disable the XanMod kernel. Defaults to the stable variant
     Xanmod(XanmodVariants),
 
     /// Disable the Liquorix kernel
     Liquorix,
+
+    /// Disable the Libre kernel
+    Libre,
 }
 
 #[derive(Args, PartialEq, Default)]

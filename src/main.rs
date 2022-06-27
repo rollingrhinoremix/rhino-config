@@ -126,6 +126,7 @@ fn main() -> Result<()> {
 
         Commands::SwitchKernel(operation) => {
             let liquorix_config_path = &config_path.join("liquorix");
+            let libre_config_path = &config_path.join("libre");
 
             match operation {
                 SwitchKernel::Enable(kernel) => match kernel {
@@ -133,6 +134,7 @@ fn main() -> Result<()> {
                         switch_kernel::enable_xanmod(&config_path, variants)
                     },
                     EnableKernel::Liquorix => switch_kernel::enable_liquorix(liquorix_config_path),
+                    EnableKernel::Libre => switch_kernel::enable_libre(libre_config_path),
                 },
 
                 SwitchKernel::Disable(kernel) => match kernel {
@@ -142,6 +144,7 @@ fn main() -> Result<()> {
                     DisableKernel::Liquorix => {
                         switch_kernel::disable_liquorix(liquorix_config_path)
                     },
+                    DisableKernel::Libre => switch_kernel::disable_libre(libre_config_path),
                 },
             }
         },

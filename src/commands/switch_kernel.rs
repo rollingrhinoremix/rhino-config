@@ -77,6 +77,16 @@ pub fn enable_liquorix(config_path: &Path) -> Result<()> {
     Ok(())
 }
 
+pub fn enable_libre(config_path: &Path) -> Result<()> {
+    ensure!(
+        !config_path.exists(),
+        r#"The Libre kernel is already enabled! Run "rhino-update" to install it."#
+    );
+    File::create(config_path).context("Failed to create the libre config file!")?;
+    println!(r#"The Libre kernel has been enabled - please run "rhino-update" to install it."#);
+    Ok(())
+}
+
 pub fn disable_xanmod(config_dir: &Path, variants: &XanmodVariants) -> Result<()> {
     remove_config!(stable, config_dir, variants);
     remove_config!(edge, config_dir, variants);
@@ -99,6 +109,16 @@ pub fn disable_liquorix(config_path: &Path) -> Result<()> {
     );
     fs::remove_file(config_path).context("Failed to remove the liquorix config file!")?;
     println!(r#"The Liquorix kernel has been disabled."#);
+    Ok(())
+}
+
+pub fn disable_libre(config_path: &Path) -> Result<()> {
+    ensure!(
+        config_path.exists(),
+        r#"The Libre kernel is already disabled!"#
+    );
+    fs::remove_file(config_path).context("Failed to remove the libre config file!")?;
+    println!(r#"The Libre kernel has been disabled."#);
     Ok(())
 }
 
@@ -167,6 +187,25 @@ mod tests {
     }
 
     #[rstest]
+    fn test_enable_libre(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {
+        let config_path = temp_dir.path().join("libre");
+
+        // Test that the config file is created
+        super::enable_libre(&config_path)?;
+        assert!(config_path.exists());
+
+        // Test that it errors out if the config file is already present
+        assert_eq!(
+            super::enable_libre(&config_path)
+                .unwrap_err()
+                .to_string(),
+            r#"The Libre kernel is already enabled! Run "rhino-update" to install it."#
+        );
+
+        Ok(())
+    }
+
+    #[rstest]
     fn test_disable_xanmod(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {
         let config_dir = temp_dir.path();
         let variants = XanmodVariants {
@@ -226,6 +265,25 @@ mod tests {
                 .unwrap_err()
                 .to_string(),
             r#"The Liquorix kernel is already disabled!"#
+        );
+        Ok(())
+    }
+
+    #[rstest]
+    fn test_disable_libre(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {
+        let config_path = temp_dir.path().join("libre");
+        File::create(&config_path)?;
+
+        // Test that the config file is deleted
+        super::disable_libre(&config_path)?;
+        assert!(!config_path.exists());
+
+        // Test that it errors out if the config file is not present
+        assert_eq!(
+            super::disable_libre(&config_path)
+                .unwrap_err()
+                .to_string(),
+            r#"The Libre kernel is already disabled!"#
         );
         Ok(())
     }

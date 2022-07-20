@@ -124,24 +124,27 @@ fn main() -> Result<()> {
             Ok(())
         },
 
-        // Commands::SwitchKernel(kernel) => match &kernel {
-
-        // },
         Commands::SwitchKernel(operation) => {
-            let xanmod_config_path = &config_path.join("xanmod");
             let liquorix_config_path = &config_path.join("liquorix");
+            let libre_config_path = &config_path.join("libre");
 
             match operation {
                 SwitchKernel::Enable(kernel) => match kernel {
-                    EnableKernel::Xanmod => switch_kernel::enable_xanmod(xanmod_config_path),
+                    EnableKernel::Xanmod(variants) => {
+                        switch_kernel::enable_xanmod(&config_path, variants)
+                    },
                     EnableKernel::Liquorix => switch_kernel::enable_liquorix(liquorix_config_path),
+                    EnableKernel::Libre => switch_kernel::enable_libre(libre_config_path),
                 },
 
                 SwitchKernel::Disable(kernel) => match kernel {
-                    DisableKernel::Xanmod => switch_kernel::disable_xanmod(xanmod_config_path),
+                    DisableKernel::Xanmod(variants) => {
+                        switch_kernel::disable_xanmod(&config_path, variants)
+                    },
                     DisableKernel::Liquorix => {
                         switch_kernel::disable_liquorix(liquorix_config_path)
                     },
+                    DisableKernel::Libre => switch_kernel::disable_libre(libre_config_path),
                 },
             }
         },

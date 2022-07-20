@@ -104,12 +104,12 @@ pub enum SwitchKernel {
 
 #[derive(Subcommand)]
 pub enum EnableKernel {
-    /// Enable the XanMod kernel
+    /// Enable the XanMod kernel. Defaults to the stable variant
     ///
     /// XanMod is a general-purpose Linux kernel distribution with custom
     /// settings and new features. Built to provide a stable, responsive and
     /// smooth desktop experience
-    Xanmod,
+    Xanmod(XanmodVariants),
 
     /// Enable the Liquorix kernel
     ///
@@ -117,13 +117,50 @@ pub enum EnableKernel {
     /// configuration and kernel sources for desktop, multimedia, and gaming
     /// workloads
     Liquorix,
+
+    /// Enable the Libre kernel
+    ///
+    /// Linux-libre is a modified version of the Linux kernel that contains no
+    /// binary blobs, obfuscated code, or code released under proprietary
+    /// licenses
+    Libre,
 }
 
 #[derive(Subcommand)]
 pub enum DisableKernel {
-    /// Disable the XanMod kernel
-    Xanmod,
+    /// Disable the XanMod kernel. Defaults to the stable variant
+    Xanmod(XanmodVariants),
 
     /// Disable the Liquorix kernel
     Liquorix,
+
+    /// Disable the Libre kernel
+    Libre,
+}
+
+#[derive(Args, PartialEq, Default)]
+pub struct XanmodVariants {
+    /// Stable variant
+    #[clap(short, long)]
+    pub stable: bool,
+
+    /// Mainline variant
+    #[clap(short, long)]
+    pub edge: bool,
+
+    /// Long-Term-Support variant
+    #[clap(short, long)]
+    pub lts: bool,
+
+    /// Realtime variant
+    #[clap(short, long)]
+    pub realtime: bool,
+
+    /// Uses the Task Type CPU scheduler (in development)
+    #[clap(long)]
+    pub tasktype: bool,
+
+    /// Realtime variant of the edge kernel (in development)
+    #[clap(long)]
+    pub realtime_edge: bool,
 }

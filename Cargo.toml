@@ -10,7 +10,7 @@ description = "Utility to edit rolling rhino remix config"
 build = "build.rs"
 
 [dependencies]
-anyhow = "1.0.57"
+anyhow = "1.0.58"
 clap = { version = "~3.1.18", features = ["derive"] }
 indoc = "1.0.6"
 

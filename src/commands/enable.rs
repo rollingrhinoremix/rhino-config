@@ -3,20 +3,6 @@ use std::path::Path;
 use std::process::Command;
 
 use anyhow::{ensure, Context, Result};
-use indoc::indoc;
-
-pub fn pacstall(config_path: &Path) -> Result<()> {
-    File::create(config_path).context("Unable to create pacstall config!")?;
-
-    println!(indoc!(
-        r#"
-        Pacstall has been enabled on the system, please check the
-        pacstall documentation on our website for information on how to
-        use this utility - please run "rhino-update" to update your system.
-        "#
-    ));
-    Ok(())
-}
 
 pub fn snapdpurge(config_path: &Path, snap_path: &Path) -> Result<()> {
     File::create(config_path).context("Failed to create the snapdpurge config!")?;
@@ -79,17 +65,6 @@ mod tests {
 
     #[fixture]
     fn temp_dir() -> TempDir { tempdir().unwrap() }
-
-    #[rstest]
-    fn test_pacstall(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {
-        let config_path = temp_dir.path().join("pacstall");
-
-        super::pacstall(&config_path)?;
-        // Test that the config file is created
-        assert!(config_path.exists());
-
-        Ok(())
-    }
 
     #[rstest]
     fn test_snapdpurge(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {

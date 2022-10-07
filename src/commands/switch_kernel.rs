@@ -196,9 +196,7 @@ mod tests {
 
         // Test that it errors out if the config file is already present
         assert_eq!(
-            super::enable_libre(&config_path)
-                .unwrap_err()
-                .to_string(),
+            super::enable_libre(&config_path).unwrap_err().to_string(),
             r#"The Libre kernel is already enabled! Run "rhino-update" to install it."#
         );
 
@@ -280,9 +278,7 @@ mod tests {
 
         // Test that it errors out if the config file is not present
         assert_eq!(
-            super::disable_libre(&config_path)
-                .unwrap_err()
-                .to_string(),
+            super::disable_libre(&config_path).unwrap_err().to_string(),
             r#"The Libre kernel is already disabled!"#
         );
         Ok(())

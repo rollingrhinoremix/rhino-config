@@ -50,8 +50,6 @@ fn main() -> Result<()> {
     let config_path = home_path.join(".rhino/config/");
     fs::create_dir_all(&config_path).context("Failed to create config directory!")?;
 
-    let pacstall_config_path = config_path.join("pacstall");
-
     let snapdpurge_config_path = config_path.join("snapdpurge");
     let snapdpurge_snap_path = home_path.join("snap/");
 
@@ -68,20 +66,6 @@ fn main() -> Result<()> {
                         );
                     }
                 }
-
-                if !pacstall_config_path.exists() {
-                    if ask(
-                        "Do you wish to enable Pacstall, an additional AUR-like package manager \
-                         for Ubuntu on this system?",
-                    ) {
-                        enable::pacstall(&pacstall_config_path)?;
-                    } else {
-                        println!(
-                            "No changes were made to the Rhino configuration, Pacstall has not \
-                             been enabled."
-                        );
-                    }
-                }
             }
 
             if flag.snapdpurge {
@@ -90,14 +74,6 @@ fn main() -> Result<()> {
                     "Snapdpurge is already enabled!"
                 );
                 enable::snapdpurge(&snapdpurge_config_path, &snapdpurge_snap_path)?;
-            }
-
-            if flag.pacstall {
-                ensure!(
-                    !pacstall_config_path.exists(),
-                    "Pacstall is already enabled!"
-                );
-                enable::pacstall(&pacstall_config_path)?;
             }
 
             Ok(())
@@ -110,15 +86,6 @@ fn main() -> Result<()> {
                 );
 
                 disable::snapdpurge(&snapdpurge_config_path)?;
-            }
-
-            if flag.pacstall {
-                ensure!(
-                    pacstall_config_path.exists(),
-                    "Pacstall is already disabled!"
-                );
-
-                disable::pacstall(&pacstall_config_path)?;
             }
 
             Ok(())

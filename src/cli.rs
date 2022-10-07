@@ -37,7 +37,7 @@ pub enum Commands {
 #[clap(group(
     ArgGroup::new("operations")
         .multiple(true)
-        .args(&["pacstall", "snapdpurge"]),
+        .args(&["snapdpurge"]),
 ))]
 pub struct EnableCommand {
     /// Run interactively
@@ -49,14 +49,6 @@ pub struct EnableCommand {
     #[clap(required_unless_present("operations"))]
     #[clap(short, long)]
     pub interactive: bool,
-
-    /// Enable Pacstall, an additional AUR-like package manager for Ubuntu
-    ///
-    /// Pacstall can be enabled via the rhino-config enable command. This will
-    /// download, install and keep Pacstall updated. Pacstall is an AUR-like
-    /// package manager for Ubuntu and Ubuntu-based systems
-    #[clap(short, long)]
-    pub pacstall: bool,
 
     /// Remove Snapcraft (snapd) and replace it with Flatpak
     ///
@@ -73,17 +65,9 @@ pub struct EnableCommand {
             ArgGroup::new("operations")
                 .required(true)
                 .multiple(true)
-                .args(&["pacstall", "snapdpurge"]),
+                .args(&["snapdpurge"]),
         ))]
 pub struct DisableCommand {
-    /// Disable Pacstall, an additional AUR-like package manager for Ubuntu
-    ///
-    /// This disables and uninstalls Pacstall from your system. Pacstall will
-    /// no longer be updated and all applications installed via Pacstall will
-    /// have to be manually updated or removed from your system
-    #[clap(short, long)]
-    pub pacstall: bool,
-
     /// Install Snapcraft (snapd)
     ///
     /// This reinstalls snapd on your system. Flatpak will still remain on your

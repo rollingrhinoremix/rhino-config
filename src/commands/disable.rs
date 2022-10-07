@@ -4,35 +4,6 @@ use std::process::Command;
 
 use anyhow::{ensure, Context, Result};
 
-pub fn pacstall(config_path: &Path) -> Result<()> {
-    fs::remove_file(&config_path).context("Unable to remove pacstall config file!")?;
-    println!("Pacstall has been disabled.");
-    println!("Removing pacstall...");
-
-    // Get the uninstall script from `curl` or `wget` depending upon which is
-    // installed on the system. Capture the output also.
-    let uninstall_script = if Command::new("curl").output()?.status.success() {
-        String::from_utf8(
-            Command::new("curl")
-                .args(["-fsSL", "https://git.io/JEZbi"])
-                .output()?
-                .stdout,
-        )?
-    } else {
-        String::from_utf8(
-            Command::new("wget")
-                .args(["-q", "https://git.io/JEZbi", "-O", "-"])
-                .output()?
-                .stdout,
-        )?
-    };
-    ensure!(Command::new("bash")
-        .args(["-c", &uninstall_script])
-        .status()?
-        .success());
-    Ok(())
-}
-
 pub fn snapdpurge(config_path: &Path) -> Result<()> {
     fs::remove_file(&config_path).context("Unable to remove snapdpurge config file!")?;
     println!("Snapdpurge has been disabled.");
@@ -72,18 +43,6 @@ mod tests {
 
     #[fixture]
     fn temp_dir() -> TempDir { tempdir().unwrap() }
-
-    #[rstest]
-    fn test_pacstall(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {
-        let config_path = temp_dir.path().join("pacstall");
-        File::create(&config_path)?;
-
-        super::pacstall(&config_path)?;
-        // Test that the config file is deleted
-        assert!(!config_path.exists());
-
-        Ok(())
-    }
 
     #[rstest]
     fn test_snapdpurge(temp_dir: TempDir) -> Result<(), Box<dyn Error>> {

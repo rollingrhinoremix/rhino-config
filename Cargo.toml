@@ -20,5 +20,5 @@ clap_complete = "3.2.0"
 clap_mangen = "0.1.7"
 
 [dev-dependencies]
-rstest = "0.15.0"
+rstest = "0.16.0"
 tempfile = "3.3.0"
